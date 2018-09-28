@@ -1995,24 +1995,24 @@ void WiFiManager::handleNotFound()
   if (captivePortal())
     return; // If captive portal redirect instead of displaying the page
   handleRequest();
-//   String message = FPSTR(S_notfound); // @token notfound
-//   message += FPSTR(S_uri);            // @token uri
-//   message += server->uri();
-//   message += FPSTR(S_method); // @token method
-//   message += (server->method() == HTTP_GET) ? FPSTR(S_GET) : FPSTR(S_POST);
-//   message += FPSTR(S_args); // @token args
-//   message += server->args();
-//   message += F("\n");
+  //   String message = FPSTR(S_notfound); // @token notfound
+  //   message += FPSTR(S_uri);            // @token uri
+  //   message += server->uri();
+  //   message += FPSTR(S_method); // @token method
+  //   message += (server->method() == HTTP_GET) ? FPSTR(S_GET) : FPSTR(S_POST);
+  //   message += FPSTR(S_args); // @token args
+  //   message += server->args();
+  //   message += F("\n");
 
-//   for (uint8_t i = 0; i < server->args(); i++)
-//   {
-//     message += " " + server->argName(i) + ": " + server->arg(i) + "\n";
-//   }
-//   server->sendHeader(F("Cache-Control"), F("no-cache, no-store, must-revalidate"));
-//   server->sendHeader(F("Pragma"), F("no-cache"));
-//   server->sendHeader(F("Expires"), F("-1"));
-//   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(message.length()));
-//   server->send(404, FPSTR(HTTP_HEAD_CT2), message);
+  //   for (uint8_t i = 0; i < server->args(); i++)
+  //   {
+  //     message += " " + server->argName(i) + ": " + server->arg(i) + "\n";
+  //   }
+  //   server->sendHeader(F("Cache-Control"), F("no-cache, no-store, must-revalidate"));
+  //   server->sendHeader(F("Pragma"), F("no-cache"));
+  //   server->sendHeader(F("Expires"), F("-1"));
+  //   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(message.length()));
+  //   server->send(404, FPSTR(HTTP_HEAD_CT2), message);
 
   server->sendHeader(F("Cache-Control"), F("no-cache, no-store, must-revalidate"));
   server->sendHeader(F("Pragma"), F("no-cache"));
@@ -2020,7 +2020,6 @@ void WiFiManager::handleNotFound()
   String data = "{\"errorMessage\":\"not found\"}";
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(data.length()));
   server->send(404, FPSTR(HTTP_HEAD_JSON), data);
-
 }
 
 /**
@@ -3152,9 +3151,9 @@ void WiFiManager::handleScanWifi()
 void WiFiManager::handleSaveWifi()
 {
 
- DEBUG_WM(DEBUG_VERBOSE, F("<- HTTP WiFi Save "));
- DEBUG_WM(DEBUG_DEV, F("Method:"), server->method() == HTTP_GET ? (String)FPSTR(S_GET) : (String)FPSTR(S_POST));
- handleRequest();
+  DEBUG_WM(DEBUG_VERBOSE, F("<- HTTP WiFi Save "));
+  DEBUG_WM(DEBUG_DEV, F("Method:"), server->method() == HTTP_GET ? (String)FPSTR(S_GET) : (String)FPSTR(S_POST));
+  handleRequest();
 
   //SAVE/connect here
   _ssid = server->arg("ssid").c_str();
@@ -3162,7 +3161,10 @@ void WiFiManager::handleSaveWifi()
 
   DEBUG_WM(DEBUG_DEV, F("Ssid:"), _ssid);
   DEBUG_WM(DEBUG_DEV, F("Password:"), _pass);
- 
+
+  if (_paramsInWifi)
+    doParamSave();
+
   String data = "{\"status\": \"ok\", \"code\":200}";
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(data.length()));
   server->sendHeader(FPSTR(HTTP_HEAD_CORS), FPSTR(HTTP_HEAD_CORS_ALLOW_ALL));
@@ -3181,6 +3183,6 @@ void WiFiManager::handleCancelWifi()
   server->sendHeader(FPSTR(HTTP_HEAD_CL), String(data.length()));
   server->sendHeader(FPSTR(HTTP_HEAD_CORS), FPSTR(HTTP_HEAD_CORS_ALLOW_ALL));
   server->send(200, FPSTR(HTTP_HEAD_JSON), data);
-  
+
   abort = true;
 }
