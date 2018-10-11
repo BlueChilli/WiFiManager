@@ -234,6 +234,9 @@ class WiFiManager
     void setMenu(std::vector<const char *> &menu);
     void setMenu(const char *menu[], uint8_t size);
 
+    void setEncryptCallback(std::function<char *(char *)> func);
+    void setDecryptCallback(std::function<char *(char *)> func);
+
     // get last connection result, includes autoconnect and wifisave
     uint8_t getLastConxResult();
     // get a status as string
@@ -466,6 +469,8 @@ class WiFiManager
     // callbacks
     std::function<void(WiFiManager *)> _apcallback;
     std::function<void()> _savecallback;
+    std::function<char *(char *)> _encryptcallback;
+    std::function<char *(char *)> _decryptcallback;
 
     template <class T>
     auto optionalIPFromString(T *obj, const char *s) -> decltype(obj->fromString(s))

@@ -3157,10 +3157,25 @@ void WiFiManager::handleSaveWifi()
 
   //SAVE/connect here
   _ssid = server->arg("ssid").c_str();
-  _pass = server->arg("pwd").c_str();
+  String pass = server->arg("pwd").c_str();
+  String encrypted = server->arg("enc").c_str();
 
   DEBUG_WM(DEBUG_DEV, F("Ssid:"), _ssid);
-  DEBUG_WM(DEBUG_DEV, F("Password:"), _pass);
+  DEBUG_WM(DEBUG_DEV, F("Password:"), pass);
+
+  if (encrypted != NULL && !strcmp(encrypted.c_str(), "Y"))
+  {
+    DEBUG_WM(DEBUG_DEV, F("Encrypted:YES"));
+    if (_decryptcallback != NULL)
+    {
+      char *decrypted = _decryptcallback((char *)pass.c_str());
+      _pass = String(decrypted);
+    }
+  }
+  else
+  {
+    _pass = pass;
+  }
 
   if (_paramsInWifi)
     doParamSave();
@@ -3185,4 +3200,14 @@ void WiFiManager::handleCancelWifi()
   server->send(200, FPSTR(HTTP_HEAD_JSON), data);
 
   abort = true;
+}
+
+void WiFiManager::setEncryptCallback(std::function<char *(char *)> func)
+{
+  _encryptcallback = func;
+}
+
+void WiFiManager::setDecryptCallback(std::function<char *(char *)> func)
+{
+  _decryptcallback = func;
 }
