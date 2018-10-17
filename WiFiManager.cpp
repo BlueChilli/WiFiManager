@@ -3158,23 +3158,30 @@ void WiFiManager::handleSaveWifi()
   //SAVE/connect here
   _ssid = server->arg("ssid").c_str();
   String pass = server->arg("pwd").c_str();
-  String encrypted = server->arg("enc").c_str();
+  String enc = server->arg("enc").c_str();
+  bool encrypted = enc != NULL && enc.equals("True");
 
   DEBUG_WM(DEBUG_DEV, F("Ssid:"), _ssid);
   DEBUG_WM(DEBUG_DEV, F("Password:"), pass);
+  DEBUG_WM(DEBUG_DEV, F("Encrypted:"), enc);
 
-  if (encrypted != NULL && !strcmp(encrypted.c_str(), "Y"))
+  if (encrypted)
   {
-    DEBUG_WM(DEBUG_DEV, F("Encrypted:YES"));
+    DEBUG_WM(DEBUG_DEV, F("Encrypted ...."));
+
     if (_decryptcallback != NULL)
     {
+      DEBUG_WM(DEBUG_DEV, F("Decrypting ...."));
       char *decrypted = _decryptcallback((char *)pass.c_str());
       _pass = String(decrypted);
+      DEBUG_WM(DEBUG_DEV, F("Password:"), _pass);
     }
   }
   else
   {
+    DEBUG_WM(DEBUG_DEV, F("Not Decrypting ...."));
     _pass = pass;
+    DEBUG_WM(DEBUG_DEV, F("Password:"), _pass);
   }
 
   if (_paramsInWifi)
