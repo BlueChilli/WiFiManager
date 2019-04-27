@@ -528,17 +528,17 @@ void WiFiManager::setupConfigPortal()
 
   /* Setup httpd callbacks, web pages: root, wifi config pages, SO captive portal detectors and not found. */
   server->on(String(FPSTR(R_root)).c_str(), std::bind(&WiFiManager::handleRoot, this));
-  // server->on(String(FPSTR(R_wifi)).c_str(), std::bind(&WiFiManager::handleWifi, this, true));
-  // server->on(String(FPSTR(R_wifinoscan)).c_str(), std::bind(&WiFiManager::handleWifi, this, false));
-  // server->on(String(FPSTR(R_wifisave)).c_str(), std::bind(&WiFiManager::handleWifiSave, this));
-  // server->on(String(FPSTR(R_info)).c_str(), std::bind(&WiFiManager::handleInfo, this));
-  // server->on(String(FPSTR(R_param)).c_str(), std::bind(&WiFiManager::handleParam, this));
-  // server->on(String(FPSTR(R_paramsave)).c_str(), std::bind(&WiFiManager::handleParamSave, this));
-  // server->on(String(FPSTR(R_restart)).c_str(), std::bind(&WiFiManager::handleReset, this));
-  // server->on(String(FPSTR(R_exit)).c_str(), std::bind(&WiFiManager::handleExit, this));
-  // server->on(String(FPSTR(R_close)).c_str(), std::bind(&WiFiManager::handleClose, this));
-  // server->on(String(FPSTR(R_erase)).c_str(), std::bind(&WiFiManager::handleErase, this, false));
-  // server->on(String(FPSTR(R_status)).c_str(), std::bind(&WiFiManager::handleWiFiStatus, this));
+  server->on(String(FPSTR(R_wifi)).c_str(), std::bind(&WiFiManager::handleWifi, this, true));
+  server->on(String(FPSTR(R_wifinoscan)).c_str(), std::bind(&WiFiManager::handleWifi, this, false));
+  server->on(String(FPSTR(R_wifisave)).c_str(), std::bind(&WiFiManager::handleWifiSave, this));
+  server->on(String(FPSTR(R_info)).c_str(), std::bind(&WiFiManager::handleInfo, this));
+  server->on(String(FPSTR(R_param)).c_str(), std::bind(&WiFiManager::handleParam, this));
+  server->on(String(FPSTR(R_paramsave)).c_str(), std::bind(&WiFiManager::handleParamSave, this));
+  server->on(String(FPSTR(R_restart)).c_str(), std::bind(&WiFiManager::handleReset, this));
+  server->on(String(FPSTR(R_exit)).c_str(), std::bind(&WiFiManager::handleExit, this));
+  server->on(String(FPSTR(R_close)).c_str(), std::bind(&WiFiManager::handleClose, this));
+  server->on(String(FPSTR(R_erase)).c_str(), std::bind(&WiFiManager::handleErase, this, false));
+  server->on(String(FPSTR(R_status)).c_str(), std::bind(&WiFiManager::handleWiFiStatus, this));
   server->on(String(FPSTR(R_scanWifi)).c_str(), std::bind(&WiFiManager::handleScanWifi, this));
   server->on(String(FPSTR(R_saveWifi)).c_str(), HTTP_POST, std::bind(&WiFiManager::handleSaveWifi, this));
   server->on(String(FPSTR(R_cancelWifi)).c_str(), std::bind(&WiFiManager::handleCancelWifi, this));
